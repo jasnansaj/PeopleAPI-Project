@@ -10,6 +10,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -141,5 +142,36 @@ public class PeopleApiClient {
         return response;
     }
 
-    //PUT metoda za domasna 
+    //PUT metoda za domasna
+
+    public HttpResponse updateLocation () throws Exception {
+        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+
+        SSLContext sslContext = SSLContextBuilder
+                .create()
+                .loadTrustMaterial(new TrustSelfSignedStrategy())
+                .build();
+
+        HttpPut  locationUpdate = new HttpPut("https://people-api1.herokuapp.com/api/person/613de0e0dd85560004b265ad");
+
+        JSONObject payloadAsObject = new JSONObject();
+        payloadAsObject.put("location ","Skopje");
+
+        String payloadAsString = payloadAsObject.toString();
+
+        locationUpdate.setHeader(contentType);
+        locationUpdate.setEntity(new StringEntity(payloadAsObject.toString()));
+
+        HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
+        HttpResponse response = httpClient.execute(locationUpdate);
+
+        HttpEntity entityUpdate = response.getEntity();
+        String bodyLocationUpdate = EntityUtils.toString(entityUpdate);
+
+        HttpEntity newEntity = new StringEntity(bodyLocationUpdate, ContentType.get(entityUpdate));
+        response.setEntity(newEntity);
+
+        return response;
+
+    }
 }

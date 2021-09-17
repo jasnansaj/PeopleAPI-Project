@@ -16,7 +16,8 @@ public class InitialTestFramework{
     @Test
     public void initialTest() throws Exception {
         //make a request to people Api
-       response = peopleApiClient.postNewPerson();
+     //  response = peopleApiClient.postNewPerson();
+        response = peopleApiClient.updateLocation();
      //  getPeople = peopleApiClient.getAllPeople();
      //  getSinglePerson = peopleApiClient.getSinglePerson();
 
